@@ -1,6 +1,6 @@
 # lissa-auth-security-lib
 
-### Подключение библиотеки
+### Подключение библиотеки для Maven:
 ```xml
 <dependency>
     <groupId>lissa.trading</groupId>
