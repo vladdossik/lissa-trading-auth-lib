@@ -1,4 +1,4 @@
-package lissa.trading.auth_security_lib.feign;
+package lissa.trading.lissa.auth.lib.feign;
 
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Configuration;

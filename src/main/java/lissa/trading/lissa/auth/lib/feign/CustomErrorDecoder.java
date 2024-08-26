@@ -1,11 +1,11 @@
-package lissa.trading.auth_security_lib.feign;
+package lissa.trading.lissa.auth.lib.feign;
 
 import feign.Response;
 import feign.codec.ErrorDecoder;
-import lissa.trading.auth_security_lib.exception.BadRequestException;
-import lissa.trading.auth_security_lib.exception.ForbiddenException;
-import lissa.trading.auth_security_lib.exception.NotFoundException;
-import lissa.trading.auth_security_lib.exception.UnauthorizedException;
+import lissa.trading.lissa.auth.lib.exception.BadRequestException;
+import lissa.trading.lissa.auth.lib.exception.ForbiddenException;
+import lissa.trading.lissa.auth.lib.exception.NotFoundException;
+import lissa.trading.lissa.auth.lib.exception.UnauthorizedException;
 
 public class CustomErrorDecoder implements ErrorDecoder {
 

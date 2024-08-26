@@ -1,4 +1,4 @@
-package lissa.trading.auth_security_lib.security;
+package lissa.trading.lissa.auth.lib.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -15,7 +15,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public abstract class BaseWebSecurityConfig {
 
-    private final BaseAuthTokenFilter authTokenFilter;
+    private final BaseAuthTokenFilter<?> authTokenFilter;
 
     @Bean
     public SecurityFilterChain baseFilterChain(HttpSecurity http) throws Exception {
@@ -40,4 +40,3 @@ public abstract class BaseWebSecurityConfig {
         // Override this method to add custom configuration
     }
 }
-

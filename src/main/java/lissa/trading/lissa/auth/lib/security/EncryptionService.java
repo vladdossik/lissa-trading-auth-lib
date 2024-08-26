@@ -1,6 +1,6 @@
-package lissa.trading.auth_security_lib.security;
+package lissa.trading.lissa.auth.lib.security;
 
-import lissa.trading.auth_security_lib.exception.EncryptionTokenException;
+import lissa.trading.lissa.auth.lib.exception.EncryptionTokenException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +12,6 @@ import java.nio.ByteBuffer;
 import java.security.SecureRandom;
 import java.util.Base64;
 
-@Service
 @Slf4j
 public class EncryptionService {
 

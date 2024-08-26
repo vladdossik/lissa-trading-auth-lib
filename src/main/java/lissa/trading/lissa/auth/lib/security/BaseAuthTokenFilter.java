@@ -1,4 +1,4 @@
-package lissa.trading.auth_security_lib.security;
+package lissa.trading.lissa.auth.lib.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.util.List;
 
 @Slf4j
-public abstract class BaseAuthTokenFilter extends OncePerRequestFilter {
+public abstract class BaseAuthTokenFilter<T> extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain)
@@ -36,7 +36,7 @@ public abstract class BaseAuthTokenFilter extends OncePerRequestFilter {
                 return;
             }
 
-            Object userInfo = retrieveUserInfo(token);
+            T userInfo = retrieveUserInfo(token);
             if (userInfo == null) {
                 log.warn("No user info found for token: {}", token);
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "No user info found");
@@ -50,42 +50,46 @@ public abstract class BaseAuthTokenFilter extends OncePerRequestFilter {
                 return;
             }
 
-            List<SimpleGrantedAuthority> authorities = roles.stream()
-                    .map(SimpleGrantedAuthority::new)
-                    .toList();
-
-            log.debug("Setting authentication for token: {}", token);
-
-            String tinkoffToken = decodeTinkoffToken(userInfo);
-
-            if (tinkoffToken != null) {
-                updateTinkoffToken(tinkoffToken);
-            }
-            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                    userInfo, null, authorities);
-            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            setAuthentication(userInfo, roles, request);
 
         } catch (Exception ex) {
             log.error("Cannot set user authentication: {}", ex.getMessage());
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Authentication failed");
             return;
         }
-
         filterChain.doFilter(request, response);
     }
 
+    private void setAuthentication(T userInfo, List<String> roles, HttpServletRequest request) {
+        List<SimpleGrantedAuthority> authorities = roles.stream()
+                .map(SimpleGrantedAuthority::new)
+                .toList();
 
-    protected abstract List<String> parseRoles(Object userInfo);
+        log.debug("Setting authentication for token");
 
-    protected abstract Object retrieveUserInfo(String token);
+        String tinkoffToken = decodeTinkoffToken(userInfo);
+        if (tinkoffToken != null) {
+            updateTinkoffToken(tinkoffToken);
+        }
+
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                userInfo, null, authorities);
+        authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+    }
+
+
+    protected abstract List<String> parseRoles(T userInfo);
+
+    protected abstract T retrieveUserInfo(String token);
 
     protected boolean validateJwtToken(String token) {
         return token != null && !token.isEmpty();
     }
 
-    protected String decodeTinkoffToken(Object userInfo) {
+    protected String decodeTinkoffToken(T userInfo) {
+        log.debug("Base implementation of decodeTinkoffToken - no action taken.");
         return null; // Override in subclass if needed
     }
 

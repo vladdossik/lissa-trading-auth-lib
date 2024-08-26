@@ -1,6 +1,6 @@
-package lissa.trading.auth_security_lib.feign;
+package lissa.trading.lissa.auth.lib.feign;
 
-import lissa.trading.auth_security_lib.dto.UserInfoDto;
+import lissa.trading.lissa.auth.lib.dto.UserInfoDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.PostMapping;

@@ -1,4 +1,4 @@
-package lissa.trading.auth_security_lib.dto;
+package lissa.trading.lissa.auth.lib.dto;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
