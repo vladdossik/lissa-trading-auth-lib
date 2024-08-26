@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 @FeignClient(
         name = "auth-service",
-        url = "${auth.service.url:http://localhost:8081}",
+        url = "${integration.rest.auth-service-url}",
         configuration = FeignConfiguration.class
 )
 public interface AuthServiceClient {
 
-    @PostMapping("/api/auth/user-info")
+    @PostMapping("/v1/auth/user-info")
     UserInfoDto getUserInfo(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader);
 }
