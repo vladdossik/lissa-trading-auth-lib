@@ -100,7 +100,13 @@ public abstract class BaseAuthTokenFilter<T> extends OncePerRequestFilter {
     protected boolean shouldSkipFilter(HttpServletRequest request) {
         String requestURI = request.getRequestURI();
         return requestURI.startsWith("/swagger-ui/") ||
-                requestURI.startsWith("/v3/api-docs/");
+                requestURI.startsWith("/v3/api-docs/") ||
+                requestURI.startsWith("/v1/internal/") ||
+                shouldSkipFilterAddons(requestURI);
+    }
+
+    protected boolean shouldSkipFilterAddons(String requestURI) {
+        return false; // Override in subclass if needed
     }
 
     private String parseJwt(HttpServletRequest request) {
