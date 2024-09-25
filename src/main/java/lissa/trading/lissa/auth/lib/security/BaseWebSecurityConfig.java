@@ -23,6 +23,7 @@ public abstract class BaseWebSecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/swagger-ui/*", "/v3/api-docs/*").permitAll()  // Swagger
+                        .requestMatchers("/v1/internal/**").hasRole("INTERNAL_SERVICE") // Internal requests
                 );
 
         configureHttpSecurity(http);
