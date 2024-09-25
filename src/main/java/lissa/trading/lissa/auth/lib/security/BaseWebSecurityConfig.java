@@ -27,10 +27,6 @@ public abstract class BaseWebSecurityConfig {
 
         configureHttpSecurity(http);
 
-        http.authorizeHttpRequests(auth -> auth
-                .anyRequest().authenticated()
-        );
-
         http.addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
