@@ -27,6 +27,8 @@ public abstract class BaseWebSecurityConfig {
 
         configureHttpSecurity(http);
 
+        anyRequestConfiguration(http);
+
         http.addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
@@ -34,5 +36,11 @@ public abstract class BaseWebSecurityConfig {
 
     protected void configureHttpSecurity(HttpSecurity http) throws Exception {
         // Override this method to add custom configuration
+    }
+
+    protected void anyRequestConfiguration(HttpSecurity http) throws Exception {
+        http.authorizeHttpRequests(auth -> auth
+                .anyRequest().authenticated()
+        );
     }
 }
