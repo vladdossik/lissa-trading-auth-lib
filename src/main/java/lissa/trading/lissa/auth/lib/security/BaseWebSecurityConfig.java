@@ -23,13 +23,12 @@ public abstract class BaseWebSecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/swagger-ui/*", "/v3/api-docs/*").permitAll()  // Swagger
+                        .requestMatchers("/v1/internal/**").hasRole("INTERNAL_SERVICE") // Internal requests
                 );
 
         configureHttpSecurity(http);
 
-        http.authorizeHttpRequests(auth -> auth
-                .anyRequest().authenticated()
-        );
+        anyRequestConfiguration(http);
 
         http.addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);
 
@@ -38,5 +37,11 @@ public abstract class BaseWebSecurityConfig {
 
     protected void configureHttpSecurity(HttpSecurity http) throws Exception {
         // Override this method to add custom configuration
+    }
+
+    protected void anyRequestConfiguration(HttpSecurity http) throws Exception {
+        http.authorizeHttpRequests(auth -> auth
+                .anyRequest().authenticated()
+        );
     }
 }
