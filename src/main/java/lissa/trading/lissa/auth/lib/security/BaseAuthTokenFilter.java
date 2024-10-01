@@ -15,9 +15,24 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Abstract base class for JWT authentication filters.
+ * This filter processes incoming HTTP requests to authenticate users based on JWT tokens.
+ *
+ * @param <T> The type of user information object.
+ */
 @Slf4j
 public abstract class BaseAuthTokenFilter<T> extends OncePerRequestFilter {
 
+    /**
+     * Filters incoming requests to authenticate users based on JWT tokens.
+     *
+     * @param request     the HTTP request
+     * @param response    the HTTP response
+     * @param filterChain the filter chain
+     * @throws ServletException if an error occurs during filtering
+     * @throws IOException      if an I/O error occurs during filtering
+     */
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain)
             throws ServletException, IOException {
@@ -60,6 +75,13 @@ public abstract class BaseAuthTokenFilter<T> extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
+    /**
+     * Sets the authentication for the current request.
+     *
+     * @param userInfo the user information object
+     * @param roles    the list of roles
+     * @param request  the HTTP request
+     */
     private void setAuthentication(T userInfo, List<String> roles, HttpServletRequest request) {
         List<SimpleGrantedAuthority> authorities = roles.stream()
                 .map(SimpleGrantedAuthority::new)
@@ -79,24 +101,58 @@ public abstract class BaseAuthTokenFilter<T> extends OncePerRequestFilter {
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
-
+    /**
+     * Parses the roles from the user information object.
+     *
+     * @param userInfo the user information object
+     * @return the list of roles
+     */
     protected abstract List<String> parseRoles(T userInfo);
 
+    /**
+     * Retrieves the user information object from the JWT token.
+     *
+     * @param token the JWT token
+     * @return the user information object
+     */
     protected abstract T retrieveUserInfo(String token);
 
+    /**
+     * Validates the JWT token.
+     *
+     * @param token the JWT token
+     * @return true if the token is valid, false otherwise
+     */
     protected boolean validateJwtToken(String token) {
         return token != null && !token.isEmpty();
     }
 
+    /**
+     * Decodes the Tinkoff token from the user information object.
+     *
+     * @param userInfo the user information object
+     * @return the Tinkoff token, or null if not applicable
+     */
     protected String decodeTinkoffToken(T userInfo) {
         log.debug("Base implementation of decodeTinkoffToken - no action taken.");
         return null; // Override in subclass if needed
     }
 
+    /**
+     * Updates the Tinkoff token.
+     *
+     * @param tinkoffToken the Tinkoff token
+     */
     protected void updateTinkoffToken(String tinkoffToken) {
         log.debug("Base implementation of updateTinkoffToken - no action taken.");
     }
 
+    /**
+     * Determines whether the filter should be skipped for the given request.
+     *
+     * @param request the HTTP request
+     * @return true if the filter should be skipped, false otherwise
+     */
     protected boolean shouldSkipFilter(HttpServletRequest request) {
         String requestURI = request.getRequestURI();
         return requestURI.startsWith("/swagger-ui/") ||
@@ -105,10 +161,22 @@ public abstract class BaseAuthTokenFilter<T> extends OncePerRequestFilter {
                 shouldSkipFilterAddons(requestURI);
     }
 
+    /**
+     * Additional conditions to determine whether the filter should be skipped.
+     *
+     * @param requestURI the request URI
+     * @return true if the filter should be skipped, false otherwise
+     */
     protected boolean shouldSkipFilterAddons(String requestURI) {
         return false; // Override in subclass if needed
     }
 
+    /**
+     * Parses the JWT token from the HTTP request.
+     *
+     * @param request the HTTP request
+     * @return the JWT token, or null if not found or invalid
+     */
     private String parseJwt(HttpServletRequest request) {
         String headerAuth = request.getHeader("Authorization");
 
