@@ -12,9 +12,15 @@ import java.nio.ByteBuffer;
 import java.security.SecureRandom;
 import java.util.Base64;
 
+/**
+ * Service class for encryption and decryption using AES/GCM/NoPadding algorithm.
+ */
 @Slf4j
 public class EncryptionService {
 
+    /**
+     * Private constructor to prevent instantiation of this utility class.
+     */
     private EncryptionService() {
         throw new IllegalStateException("Utility class");
     }
@@ -24,7 +30,7 @@ public class EncryptionService {
     private static final int TAG_LENGTH_BIT = 128;
     private static final int IV_LENGTH_BYTE = 12;
 
-    // Ваш ключ (должен быть Base64 закодирован и иметь размер 32 байта после декодирования)
+    // Your key (must be Base64 encoded and 32 bytes long after decoding)
     private static final String SECRET_KEY_STRING = "tDfV5xlY9Fv5eH7orlcQRQhaQDevNIKHKj8I+WFqor0=";
 
     static {
@@ -32,16 +38,23 @@ public class EncryptionService {
         try {
             keyBytes = Base64.getDecoder().decode(SECRET_KEY_STRING);
         } catch (Exception e) {
-            throw new IllegalArgumentException("Ключ должен быть длиной 256 бит (32 байта) и корректно закодирован в Base64.", e);
+            throw new IllegalArgumentException("Key must be 256 bits (32 bytes) long and properly Base64 encoded.", e);
         }
         if (keyBytes.length != 32) {
-            throw new IllegalArgumentException("Ключ должен быть длиной 256 бит (32 байта).");
+            throw new IllegalArgumentException("Key must be 256 bits (32 bytes) long.");
         }
         synchronized (EncryptionService.class) {
             secretKey = new SecretKeySpec(keyBytes, "AES");
         }
     }
 
+    /**
+     * Encrypts the given plain text using AES/GCM/NoPadding algorithm.
+     *
+     * @param plainText the plain text to encrypt
+     * @return the encrypted text encoded in Base64
+     * @throws EncryptionTokenException if an error occurs during encryption
+     */
     public static String encrypt(String plainText) {
         try {
             Cipher cipher = Cipher.getInstance(ALGORITHM);
@@ -58,6 +71,13 @@ public class EncryptionService {
         }
     }
 
+    /**
+     * Decrypts the given cipher text using AES/GCM/NoPadding algorithm.
+     *
+     * @param cipherText the encrypted text encoded in Base64
+     * @return the decrypted plain text
+     * @throws EncryptionTokenException if an error occurs during decryption
+     */
     public static String decrypt(String cipherText) {
         try {
             Cipher cipher = Cipher.getInstance(ALGORITHM);
