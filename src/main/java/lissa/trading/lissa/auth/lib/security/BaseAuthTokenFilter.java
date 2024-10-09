@@ -4,6 +4,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lissa.trading.lissa.auth.lib.dto.UpdateTinkoffTokenResponce;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -143,8 +144,9 @@ public abstract class BaseAuthTokenFilter<T> extends OncePerRequestFilter {
      *
      * @param tinkoffToken the Tinkoff token
      */
-    protected void updateTinkoffToken(String tinkoffToken) {
+    protected UpdateTinkoffTokenResponce updateTinkoffToken(String tinkoffToken) {
         log.debug("Base implementation of updateTinkoffToken - no action taken.");
+        return new UpdateTinkoffTokenResponce();
     }
 
     /**
