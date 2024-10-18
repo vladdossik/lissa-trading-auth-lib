@@ -75,7 +75,7 @@
     <!-- Секция сборки проекта -->
     <build>
         <plugins>
-            <!-- Maven Compiler Plugin для компиляции проекта с нужной версией Java -->
+            <!-- Maven Compiler Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -85,6 +85,14 @@
                     <target>${java.version}</target>
                 </configuration>
             </plugin>
+
+            <!-- Maven JAR Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.2.0</version> <!-- Версия плагина, совместимая с более ранними версиями Maven -->
+            </plugin>
+
         </plugins>
     </build>
 </project>
