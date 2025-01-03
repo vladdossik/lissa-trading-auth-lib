@@ -179,7 +179,7 @@ public abstract class BaseAuthTokenFilter<T> extends OncePerRequestFilter {
      * @param request the HTTP request
      * @return the JWT token, or null if not found or invalid
      */
-    private String parseJwt(HttpServletRequest request) {
+    protected String parseJwt(HttpServletRequest request) {
         String headerAuth = request.getHeader("Authorization");
 
         if (headerAuth != null && headerAuth.startsWith("Bearer ")) {
