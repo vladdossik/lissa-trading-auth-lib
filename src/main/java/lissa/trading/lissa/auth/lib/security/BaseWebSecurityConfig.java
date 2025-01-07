@@ -33,7 +33,8 @@ public abstract class BaseWebSecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/swagger-ui/*", "/v3/api-docs/*").permitAll()  // Allow access to Swagger UI and API docs
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()  // Allow access to Swagger
+                        // UI and API docs
                         .requestMatchers("/v1/internal/**").hasRole("INTERNAL_SERVICE") // Restrict internal requests to users with INTERNAL_SERVICE role
                 );
 
