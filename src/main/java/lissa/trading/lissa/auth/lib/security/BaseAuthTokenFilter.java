@@ -47,7 +47,7 @@ public abstract class BaseAuthTokenFilter<T> extends OncePerRequestFilter {
         try {
             String token = parseJwt(request);
             if (token == null || !validateJwtToken(token)) {
-                log.warn("Token is null or invalid for request URI: {}", request.getRequestURI());
+                log.warn("Token: {} is invalid for request URI: {}", token, request.getRequestURI());
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid token");
                 return;
             }
@@ -181,7 +181,7 @@ public abstract class BaseAuthTokenFilter<T> extends OncePerRequestFilter {
      */
     protected String parseJwt(HttpServletRequest request) {
         String headerAuth = request.getHeader("Authorization");
-
+        log.info("Authorization header: {}", headerAuth);
         if (headerAuth != null && headerAuth.startsWith("Bearer ")) {
             return headerAuth.substring(7);
         }
